@@ -1,38 +1,79 @@
  package Ejercicio3;
 
 
-/**
- * Write a description of class Solution here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ 
+
 public class Solution
 {
-    // instance variables - replace the example below with your own
-    private int x;
-
-    /**
-     * Constructor for objects of class Solution
-     */
-    public Solution()
-    {
-        // initialise instance variables
-        x = 0;
+    public boolean validate(TreeNode root, Integer low, Integer high) {
+        // Los árboles vacíos son BST válidos.
+        if (root == null) {
+            return true;
+        }
+        // El valor del nodo actual debe estar entre bajo y alto.
+        if ((low != null && root.val <= low) || (high != null && root.val >= high)) {
+            return false;
+        }
+        // El valor del nodo actual debe estar entre bajo y alto.
+        return validate(root.right, root.val, high) && validate(root.left, low, root.val);
     }
 
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    public boolean isValidBST(TreeNode root) {
+        return validate(root, null, null);
+    }
+
+}
+
+/*
+class Solution {
+
+    private Deque<TreeNode> stack = new LinkedList();
+    private Deque<Integer> upperLimits = new LinkedList();
+    private Deque<Integer> lowerLimits = new LinkedList();
+
+    public void update(TreeNode root, Integer low, Integer high) {
+        stack.add(root);
+        lowerLimits.add(low);
+        upperLimits.add(high);
+    }
+
+    public boolean isValidBST(TreeNode root) {
+        Integer low = null, high = null, val;
+        update(root, low, high);
+
+        while (!stack.isEmpty()) {
+            root = stack.poll();
+            low = lowerLimits.poll();
+            high = upperLimits.poll();
+
+            if (root == null) continue;
+            val = root.val;
+            if (low != null && val <= low) {
+                return false;
+            }
+            if (high != null && val >= high) {
+                return false;
+            }
+            update(root.right, val, high);
+            update(root.left, low, val);
+        }
+        return true;
     }
 }
+*/
 
 /*
  * ANALISIS DE EL ALGORITMO
